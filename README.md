@@ -1,0 +1,1 @@
+# algoritimo-genetico_ia-2024-2
