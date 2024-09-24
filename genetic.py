@@ -100,3 +100,112 @@ melhor_rota, melhor_custo = algoritmo_genetico(matriz_distancias, num_cidades)
 
 print(f"Melhor rota encontrada: {melhor_rota}")
 print(f"Custo da melhor rota: {melhor_custo}")
+
+
+
+
+import numpy as np
+import random
+
+# Geração da matriz de distâncias entre as cidades
+def gerar_matriz_distancias(num_cidades):
+    matriz = np.random.randint(10, 100, size=(num_cidades, num_cidades))
+    np.fill_diagonal(matriz, 0)
+    return matriz
+
+# Função de avaliação: calcula o custo total da rota
+def calcular_custo_rota(rota, matriz_distancias):
+    custo_total = 0
+    for i in range(len(rota) - 1):
+        custo_total += matriz_distancias[rota[i], rota[i + 1]]
+    custo_total += matriz_distancias[rota[-1], rota[0]]  # Retorno à cidade inicial
+    return custo_total
+
+# Geração da população inicial: uma lista de rotas aleatórias (cromossomos)
+def gerar_populacao_inicial(tamanho_populacao, num_cidades):
+    return [random.sample(range(num_cidades), num_cidades) for _ in range(tamanho_populacao)]
+
+# Operador de seleção: Seleção por torneio
+def selecao_por_torneio(populacao, matriz_distancias, tamanho_torneio=3):
+    melhor = None
+    for _ in range(tamanho_torneio):
+        individuo = random.choice(populacao)
+        if melhor is None or calcular_custo_rota(individuo, matriz_distancias) < calcular_custo_rota(melhor, matriz_distancias):
+            melhor = individuo
+    return melhor
+
+# Operador de cruzamento: Order Crossover (OX)
+def crossover_ox(pai1, pai2):
+    tamanho = len(pai1)
+    ponto1, ponto2 = sorted(random.sample(range(tamanho), 2))
+    
+    filho = [None] * tamanho
+    filho[ponto1:ponto2] = pai1[ponto1:ponto2]
+    
+    preenchimento = [cidade for cidade in pai2 if cidade not in filho]
+    j = 0
+    for i in range(tamanho):
+        if filho[i] is None:
+            filho[i] = preenchimento[j]
+            j += 1
+    return filho
+
+# Operador de mutação: Troca de duas cidades aleatoriamente
+def mutacao(cromossomo, taxa_mutacao=0.01):
+    if random.random() < taxa_mutacao:
+        i, j = random.sample(range(len(cromossomo)), 2)
+        cromossomo[i], cromossomo[j] = cromossomo[j], cromossomo[i]
+    return cromossomo
+
+# Algoritmo Genético
+def algoritmo_genetico(matriz_distancias, num_cidades, tamanho_populacao=100, num_geracoes=500, taxa_crossover=0.9, taxa_mutacao=0.01):
+    # Geração da população inicial
+    populacao = gerar_populacao_inicial(tamanho_populacao, num_cidades)
+    
+    # Preservar o melhor indivíduo (elitismo)
+    melhor_solucao = min(populacao, key=lambda ind: calcular_custo_rota(ind, matriz_distancias))
+    
+    for geracao in range(num_geracoes):
+        nova_populacao = []
+        
+        for _ in range(tamanho_populacao // 2):
+            # Seleção dos pais
+            pai1 = selecao_por_torneio(populacao, matriz_distancias)
+            pai2 = selecao_por_torneio(populacao, matriz_distancias)
+            
+            # Operador de crossover
+            if random.random() < taxa_crossover:
+                filho1 = crossover_ox(pai1, pai2)
+                filho2 = crossover_ox(pai2, pai1)
+            else:
+                filho1, filho2 = pai1[:], pai2[:]
+            
+            # Operador de mutação
+            filho1 = mutacao(filho1, taxa_mutacao)
+            filho2 = mutacao(filho2, taxa_mutacao)
+            
+            nova_populacao.extend([filho1, filho2])
+        
+        # Substituição: a nova população substitui a antiga
+        populacao = nova_populacao
+        
+        # Atualizar a melhor solução (elitismo)
+        melhor_da_geracao = min(populacao, key=lambda ind: calcular_custo_rota(ind, matriz_distancias))
+        if calcular_custo_rota(melhor_da_geracao, matriz_distancias) < calcular_custo_rota(melhor_solucao, matriz_distancias):
+            melhor_solucao = melhor_da_geracao
+        
+        # Mostrar progresso a cada 100 gerações
+        if geracao % 100 == 0:
+            print(f"Geração {geracao}: Melhor custo = {calcular_custo_rota(melhor_solucao, matriz_distancias)}")
+    
+    return melhor_solucao, calcular_custo_rota(melhor_solucao, matriz_distancias)
+
+# Parâmetros do problema
+num_cidades = 10
+matriz_distancias = gerar_matriz_distancias(num_cidades)
+
+# Executando o Algoritmo Genético
+melhor_rota, melhor_custo = algoritmo_genetico(matriz_distancias, num_cidades)
+
+print(f"Melhor rota encontrada: {melhor_rota}")
+print(f"Custo da melhor rota: {melhor_custo}")

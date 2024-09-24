@@ -84,3 +84,8 @@ Na seleção por roleta, a probabilidade de um indivíduo ser escolhido é propo
   - Pode ter menos pressão seletiva, pois todos os indivíduos têm uma chance de serem escolhidos, mesmo os menos aptos (embora menor).
 
 Ambos os métodos são válidos, mas o torneio tende a ser mais fácil de ajustar e controlar a intensidade da seleção.
+
+
+
+
+
