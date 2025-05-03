@@ -9,10 +9,12 @@ Este espaço armazena implementações de algoritmos e conceitos estudados em In
 
 ## Projetos e Trabalhos
 
-### [Busca em Largura (BFS)](/busca_largura/busca_largura.py)
+### Busca em Largura
 
--   **Localização**: `busca_largura/`
 -   **Descrição**: Para o Seminário 1, uma implementação visual do algoritmo de Busca em Largura para encontrar o caminho mais curto (em número de passos) entre duas cidades em um mapa da Romênia. Utiliza Tkinter para a interface gráfica e a visualização do grafo e do caminho encontrado.
+-   **[Código](/busca_largura/busca_largura.py)**
+-   **[Relatório](/busca_largura/relatorio.pdf)**
+-   **[Apresentação](/busca_largura/apresentacao.pdf)**
 -  **Integrantes**:
     -   **[Antonio André](https://github.com/andrebarceloschagas)**
     -   **[Helorrayne Cristine](https://github.com/HeloCris)**
