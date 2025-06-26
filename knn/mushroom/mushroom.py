@@ -114,7 +114,7 @@ class KNNClassificadorCogumelos:
                 valor: idx for idx, valor in enumerate(sorted(list(valores)))
             }
         
-        # Aplica a codificação one-hot
+        # Aplica a codificação one-hot (cada valor único vira uma coluna binária)
         for linha in dataset:
             linha_codificada = []
             for i, nome_caracteristica in enumerate(cabecalho[:-1]):
@@ -364,13 +364,13 @@ def main():
     
     # Interpretação dos resultados
     if acuracia >= 95:
-        print("🎯 Excelente! O modelo tem performance muito alta.")
+        print("Excelente! O modelo tem performance muito alta.")
     elif acuracia >= 85:
-        print("👍 Boa performance! O modelo é confiável.")
+        print("Boa performance! O modelo é confiável.")
     elif acuracia >= 70:
-        print("⚠️  Performance moderada. Considere ajustar parâmetros.")
+        print("Performance moderada. Considere ajustar parâmetros.")
     else:
-        print("❌ Performance baixa. Revisão do modelo necessária.")
+        print("Performance baixa. Revisão do modelo necessária.")
     
     # Avalia diferentes valores de k
     print(f"\n" + "-" * 80)
